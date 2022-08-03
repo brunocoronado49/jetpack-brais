@@ -1,7 +1,9 @@
 package com.brauny.compose
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.text.TextStyle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            // Le añadimos el tema que tenemos por defecto
             ComposeTheme() {
                 MyComponent()
             }
@@ -35,25 +38,27 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyImage() {
+    // Se modificara dependiendo de lo que vaya primero
     Image(
         painterResource(R.drawable.ic_launcher_foreground),
         "Android developer",
         modifier = Modifier
             .clip(CircleShape)
-            .background(MaterialTheme.colors.primary)
+            .background(Color.Red)
             .size(64.dp)
     )
 }
 
 @Composable
-fun MyText(text: String) {
-    Text(text)
+fun MyText(text: String, color: Color, style: TextStyle) {
+    Text(text, color = color, style = style)
 }
 
 @Composable
 fun MyComponent() {
+    // Se modifica dentro del componente y antes del cuearpo de los componentes
     Row(
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.background(MaterialTheme.colors.onBackground).padding(8.dp)
     ) {
         MyImage()
         MyTexts()
@@ -65,13 +70,22 @@ fun MyTexts() {
     Column(
         modifier = Modifier.padding(start = 8.dp)
     ) {
-        MyText("Hola soy Francisco")
+        MyText("Hola soy Francisco",
+            MaterialTheme.colors.primary,
+            MaterialTheme.typography.subtitle1
+        )
+
+        // Añade un espacio entre cada componente
         Spacer(modifier = Modifier.height(16.dp))
-        MyText("Hola soy un programador")
+        MyText("Hola soy un programador",
+            MaterialTheme.colors.secondary,
+            MaterialTheme.typography.subtitle2
+        )
     }
 }
 
-@Preview
+// Para ver el tema oscuro pasar este parametro a la preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewText() {
     ComposeTheme() {
